@@ -1,4 +1,4 @@
-![STM32F303RE Embsassy Blink Driver](https://github.com/mytechnotalent/stm32f303re_embassy_blink_driver/blob/main/STM32F303RE-Embassy-Blink-Driver.png?raw=true)
+![STM32F303RE Embassy Blink Driver](https://github.com/mytechnotalent/stm32f303re_embassy_blink_driver/blob/main/STM32F303RE-Embassy-Blink-Driver.png?raw=true)
 
 ## FREE Reverse Engineering Self-Study Course [HERE](https://github.com/mytechnotalent/Reverse-Engineering-Tutorial)
 
