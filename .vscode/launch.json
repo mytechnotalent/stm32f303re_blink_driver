@@ -14,7 +14,7 @@
                 "target/stm32f3x.cfg"
             ],
             "runToEntryPoint": "main",
-            "svdFile": "",
+            "svdFile": "${workspaceFolder}/svd/STM32F303.svd",
             "preLaunchTask": "cargo: build (thumbv7em-none-eabihf)",
             "gdbPath": "arm-none-eabi-gdb",
             "showDevDebugOutput": "none",

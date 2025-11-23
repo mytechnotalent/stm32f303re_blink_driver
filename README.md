@@ -1,99 +1,175 @@
-# stm32f303re-blink
+![STM32F303RE Blink](https://raw.githubusercontent.com/mytechnotalent/stm32f303re_blink/main/STM32F303RE-Blink-Driver.png)
 
-STM32F303RE: Blink LED Driver using Embassy (Rust, async/embedded).
+## FREE Reverse Engineering Self-Study Course [HERE](https://github.com/mytechnotalent/Reverse-Engineering-Tutorial)
 
-**Project**
-- **Name:** `stm32f303re-blink` (crate version `0.1.0`)
-- **Purpose:** Demonstrate a simple asynchronous LED blink running on an STM32F303RE-based board using the Embassy ecosystem.
+<br>
 
-**Features**
-- Small, dependency-focused example using `embassy-stm32` and `embassy-executor`.
-- Configured for `thumbv7em-none-eabihf` targets.
-- Release-friendly compiler flags (LTO, sensible debug info) in `Cargo.toml`.
+# STM32F303RE Blink Driver
 
-**Prerequisites**
-- macOS with developer tools (`zsh` shell).
-- Rust toolchain (stable) and the embedded target:
+Async LED blink firmware for STM32F303RE Nucleo in Embedded Rust with Embassy; leverages STM32F303RE (ARM Cortex-M4F) for reliable GPIO control plus integrated UART output and robust capabilities.
+
+## Required Hardware
+
+- **[STM32 Nucleo-F303RE Development Board](https://www.st.com/en/evaluation-tools/nucleo-f303re.html)**  
+    - Development board based on the STM32F303RET6 microcontroller (ARM Cortex-M4F @ 72MHz).  
+    - Features: Onboard ST-LINK/V2-1 debugger, Arduino Uno V3 connectivity, 256KB Flash, 48KB RAM.  
+    - Ideal for embedded Rust development, async/await experimentation, and Embassy ecosystem learning.
+
+- **USB Mini-B Cable**  
+    - For powering the board and programming via ST-LINK.
+
+## 🚀 Quick Start
 
 ```bash
-rustup default stable
+# Connect your STM32 Nucleo board via USB
+# Run the installation script to set up dependencies
+./install.sh
+
+# Build and flash
+cargo run --release
+```
+
+That's it! The firmware will build and flash automatically.
+
+## What's Included
+
+- **GPIO Control**: Async LED blink on PA5 (green LED LD2)
+- **UART Output**: Status messages via USART2 (ST-Link VCP at 115200 baud)
+- **Embassy Async Runtime**: Clean async/await implementation for STM32F303RE
+
+## Hardware Pin Mapping
+
+- **LED (LD2)**: PA5 (GPIO output)
+- **UART TX**: PA2 (USART2, connected to ST-Link VCP)
+- **User Button**: PC13 (not used in this example)
+
+## Building
+
+This project uses Embassy from crates.io with STM32F303RE support.
+
+```bash
+# Install the ARM Cortex-M4F target (already done if you followed setup)
 rustup target add thumbv7em-none-eabihf
-rustup component add llvm-tools-preview
+
+# Build
+cargo build --release
 ```
 
-- Recommended utilities (choose one):
-  - `probe-run` (recommended for probe-rs based debugging/running)
-  - `st-flash` or `openocd` (for raw flashing)
+## Flashing to STM32F303RE
 
-Install helpful cargo tools:
+### Method 1: probe-run (Recommended)
+
+The easiest method using the integrated ST-LINK debugger:
 
 ```bash
+# Install probe-run if not already installed
 cargo install probe-run
-cargo install cargo-binutils
+
+# Build and flash
+cargo run --release
 ```
 
-If you plan to flash with ST-Link and `st-flash`, install via Homebrew:
+The `.cargo/config.toml` is configured to use `probe-run` as the runner.
+
+### Method 2: probe-rs debug
+
+For interactive debugging:
 
 ```bash
+# Install probe-rs
+cargo install probe-rs-tools --locked
+
+# Build
+cargo build --target thumbv7em-none-eabihf
+
+# Start debug session
+probe-rs debug --chip STM32F303RE --exe target/thumbv7em-none-eabihf/debug/stm32f303re-blink
+```
+
+### Method 3: VS Code Debug (OpenOCD)
+
+If you have VS Code with the Cortex-Debug extension:
+
+```bash
+# Install OpenOCD
+brew install openocd
+
+# Install ARM GDB
+brew tap ArmMbed/homebrew-formulae
+brew install arm-none-eabi-gcc
+
+# Press F5 in VS Code to build and debug
+```
+
+The project includes `.vscode/launch.json` configured for OpenOCD debugging.
+
+### Method 4: st-flash
+
+Using ST-Link utilities directly:
+
+```bash
+# Install stlink tools
 brew install stlink
-# optionally: brew tap ArmMbed/homebrew-formulae && brew install arm-none-eabi-gcc
-```
 
-**Build (recommended)**
-
-Build a release binary for the microcontroller target:
-
-```bash
+# Build
 cargo build --release --target thumbv7em-none-eabihf
-```
 
-Run the built ELF directly using `probe-run` (connect your debug probe first):
-
-```bash
-probe-run target/thumbv7em-none-eabihf/release/stm32f303re-blink
-```
-
-If you prefer to produce a raw binary for flashing with `st-flash`:
-
-```bash
+# Convert to binary
 cargo objcopy --release --target thumbv7em-none-eabihf -- -O binary target/thumbv7em-none-eabihf/release/stm32f303re-blink firmware.bin
+
+# Flash
 st-flash write firmware.bin 0x8000000
 ```
 
-Adjust the flash address (`0x08000000` or `0x8000000` depending on the tool) to match your board requirements.
+## Dependencies Note
 
-**Project Structure**
-- `Cargo.toml` : crate metadata and dependency configuration (Embassy + runtime settings).
-- `memory.x` : linker memory layout for the STM32F303RE flash/RAM.
-- `build.rs` : build script (if present) for embedding resources or generating code.
-- `src/main.rs` : application entry point (async executor + LED blink logic).
-- `src/config.rs` : board-specific pin/peripheral configuration.
+The `Cargo.toml` uses published Embassy crates from crates.io:
+- `embassy-stm32 = "0.4.0"`
+- `embassy-executor = "0.9.1"`
+- `embassy-time = "0.5.0"`
 
-**Memory Layout & Notes**
-- The repo includes `memory.x`. Ensure the flash origin and size match your board (use the correct `FLASH` base address and RAM size for the F303RE device).
-- Release profile in `Cargo.toml` enables `lto = true` and `opt-level = "z"` for size/speed tradeoffs. Adjust as needed.
+## Key Features
 
-**Debugging**
-- `probe-run` provides a convenient run-and-debug experience using probe-rs. For advanced debugging, use `gdb` via `probe-rs` or `openocd` with an ST-Link.
-- If you need RTT logs, the project already depends on `defmt`/`defmt-rtt` — use `defmt-print`/`probe-run` to capture logs.
+1. **Async/Await**: LED blink runs asynchronously using Embassy timers
+2. **Type Safety**: Rust's type system prevents many common embedded bugs
+3. **No Blocking Loops**: Uses `embassy_time::Timer` for clean delay handling
+4. **UART Logging**: Real-time status messages via ST-Link VCP
 
-**Generate API docs (local)**
+## Serial Output
 
-To build the crate documentation (including private items and your pro docstrings) and open it in your browser:
+Connect to the virtual COM port to see status messages:
+
+```bash
+# macOS
+screen /dev/tty.usbmodem* 115200
+
+# Linux
+screen /dev/ttyACM0 115200
+```
+
+Output example:
+```
+LED ON
+LED OFF
+LED ON
+LED OFF
+```
+
+## Generate API Documentation
 
 ```bash
 cargo doc --no-deps --document-private-items --open
 ```
 
-Notes:
-- `--no-deps` prevents building docs for all dependencies (useful for embedded deps that may not doc-build on the host).
-- `--document-private-items` includes private items and internal docstrings so you can inspect implementation details.
-- The generated files live under `target/<target-triple>/doc/stm32f303re_blink` (or `target/doc` for host builds).
+## Memory Layout
 
-**Contributing**
-- Keep examples minimal and focused.
-- Prefer reproducible tool versions (document changes to toolchain or `Cargo.toml`).
-- Add unit/integration tests where applicable and document new steps in this `README.md`.
+- **FLASH**: 256KB starting at 0x08000000
+- **RAM**: 48KB starting at 0x20000000
 
-- Add a `.cargo/config.toml` with a `runner = "probe-run"` entry for `cargo run`, or
-- Add CI steps to build and verify the example on push.
+Defined in `memory.x` for the STM32F303RET6.
+
+---
+
+## License
+
+[MIT](https://github.com/mytechnotalent/stm32f303re_blink/blob/main/LICENSE)
