@@ -1,4 +1,7 @@
 #!/bin/bash
+# Copyright (c) 2025 Kevin Thomas
+# Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 set -e
 
 # Install dependencies for STM32F303RE Embassy Rust development

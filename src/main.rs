@@ -1,3 +1,6 @@
+// Copyright (c) 2025 Kevin Thomas
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 //! STM32F303RE Nucleo LED Blink Example
 //!
 //! This application demonstrates basic embedded Rust development using the Embassy framework.
