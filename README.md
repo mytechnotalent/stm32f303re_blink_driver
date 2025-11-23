@@ -1,4 +1,4 @@
-![STM32F303RE Blink](https://raw.githubusercontent.com/mytechnotalent/stm32f303re_blink/main/STM32F303RE-Blink-Driver.png)
+![STM32F303RE Blink](https://raw.githubusercontent.com/mytechnotalent/stm32f303re_bare_metal_blink/main/STM32F303RE-Embassy-Blink-Driver.png)
 
 ## FREE Reverse Engineering Self-Study Course [HERE](https://github.com/mytechnotalent/Reverse-Engineering-Tutorial)
 
