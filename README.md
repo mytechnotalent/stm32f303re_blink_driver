@@ -84,5 +84,3 @@ Adjust the flash address (`0x08000000` or `0x8000000` depending on the tool) to 
 
 - Add a `.cargo/config.toml` with a `runner = "probe-run"` entry for `cargo run`, or
 - Add CI steps to build and verify the example on push.
-
-Tell me which of the above you'd like next.
