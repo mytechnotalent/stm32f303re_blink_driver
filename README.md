@@ -12,7 +12,7 @@ Async LED blink firmware for STM32F303RE Nucleo in Embedded Rust with Embassy; l
 
 - **[STM32 Nucleo-F303RE Development Board](https://www.st.com/en/evaluation-tools/nucleo-f303re.html)**  
     - Development board based on the STM32F303RET6 microcontroller (ARM Cortex-M4F @ 72MHz).  
-    - Features: Onboard ST-LINK/V2-1 debugger, Arduino Uno V3 connectivity, 256KB Flash, 48KB RAM.  
+    - Features: Onboard ST-LINK/V2-1 debugger, Arduino Uno V3 connectivity, 512KB Flash, 64KB RAM.  
     - Ideal for embedded Rust development, async/await experimentation, and Embassy ecosystem learning.
 
 - **USB Mini-B Cable**  
@@ -163,8 +163,8 @@ cargo doc --no-deps --document-private-items --open
 
 ## Memory Layout
 
-- **FLASH**: 256KB starting at 0x08000000
-- **RAM**: 48KB starting at 0x20000000
+- **FLASH**: 512KB starting at 0x08000000
+- **RAM**: 64KB starting at 0x20000000
 
 Defined in `memory.x` for the STM32F303RET6.
 
